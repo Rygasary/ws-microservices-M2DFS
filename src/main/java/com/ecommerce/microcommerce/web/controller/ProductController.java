@@ -16,6 +16,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -24,6 +25,13 @@ public class ProductController {
 
     @Autowired
     private ProductDao productDao;
+
+    private static List<Product> productList = new ArrayList<>();
+    static {
+        productList.add(new Product(1, "Ordinateur Portable", 350, 230));
+        productList.add(new Product(2, "Aspirateur Robot", 500, 300));
+        productList.add(new Product(3, "Table de Ping Pong", 750, 350));
+    }
 
 
     //Récupérer la liste des produits
@@ -39,6 +47,7 @@ public class ProductController {
 
 
     //Récupérer un produit par son Id
+    @GetMapping(value = "/getProduct/{productid}")
     public Product afficherUnProduit() {
         return null;
     }
@@ -65,11 +74,15 @@ public class ProductController {
     }
 
     // supprimer un produit
-    public void supprimerProduit() {
+    @DeleteMapping(value = "/deleteProduct/{productid}")
+    public void supprimerProduit(@PathVariable String productname) {
+
     }
 
     // Mettre à jour un produit
+    @PatchMapping(value = "/patchProduct/{productid}")
     public void updateProduit(@RequestBody Product product) {
+
     }
 
 
