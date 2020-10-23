@@ -40,7 +40,7 @@ public class ProductController {
 
 
     //Récupérer la liste des produits
-    @ApiOperation(value = "Get all products", response = Iterable.class, tags = "listeProduits")
+    @ApiOperation(value = "Retourne une Map de tous les produits", response = Iterable.class, tags = "listeProduits")
     @GetMapping(value = "/Produits")
     public Map<Integer, Product> listeProduits() {
         return productDB;
@@ -48,7 +48,7 @@ public class ProductController {
 
 
     //Récupérer un produit par son Id
-    @ApiOperation(value = "Get a product with its ID", response = Product.class, tags = "afficherUnProduit")
+    @ApiOperation(value = "Retourne un produit grâce à son ID", response = Product.class, tags = "afficherUnProduit")
     @GetMapping(value = "/getProduct/{productId}")
     public Product afficherUnProduit(@PathVariable int productId) {
         System.out.println("Getting product with ID " + productId);
@@ -65,7 +65,7 @@ public class ProductController {
 
 
     //ajouter un produit
-    @ApiOperation(value = "Add a product", tags = "ajouterProduit")
+    @ApiOperation(value = "Ajoute un produit", tags = "ajouterProduit")
     @PostMapping(value = "/Produits")
     public ResponseEntity<Void> ajouterProduit(@Valid @RequestBody Product product) {
 
@@ -84,7 +84,7 @@ public class ProductController {
     }
 
     // supprimer un produit
-    @ApiOperation(value = "Delete a product", tags = "supprimerProduit")
+    @ApiOperation(value = "Supprime un produit", tags = "supprimerProduit")
     @DeleteMapping(value = "/deleteProduct/{productId}")
     public ResponseEntity<String> supprimerProduit(@PathVariable int productId) {
         System.out.println("Deleting product with ID " + productId);
@@ -94,10 +94,14 @@ public class ProductController {
         productDB.remove(productId);
         return new ResponseEntity<>("Le produit " + productId + " a été supprimé", HttpStatus.OK);
     }
-
+    /*
+    **************************************
+    TODO LA MISE A JOUR!!!!!!!!!!!!!!
+    **************************************
+    */
     // Mettre à jour un produit
-    @ApiOperation(value = "Update entirely a product", tags = "updateProduit")
-    @PutMapping(value = "/patchProduct/{productid}")
+    @ApiOperation(value = "Mets à jour un produit", tags = "updateProduit")
+    @PutMapping(value = "/updateProduct/{productid}")
     public ResponseEntity<String> updateProduit(@RequestBody Product product, @PathVariable int productId) {
         System.out.println("Updating product with ID " + productId);
         Product productUpdated = productDB.get(productId);
@@ -106,6 +110,20 @@ public class ProductController {
         }
         product.setId(productId);
         return null;
+    }
+
+    @ApiOperation(value = "Retourne la différence entre le prix et le prixAchat d'un produit à partir de son ID", tags = "updateProduit")
+    @GetMapping(value = "/calculerMargeProduit/{productId}")
+    public ResponseEntity<Integer> calculerMargeProduit(@PathVariable int productId){
+        System.out.println("Getting price difference of product with ID " + productId);
+        Product product = productDB.get(productId);
+
+        if (product == null){
+            return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
+        }
+
+        int priceDifference = product.getPrix() - product.getPrixAchat();
+        return new ResponseEntity<>(priceDifference, HttpStatus.OK);
     }
 
 
