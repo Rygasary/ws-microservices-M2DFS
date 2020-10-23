@@ -40,7 +40,7 @@ public class ProductController {
 
 
     //Récupérer la liste des produits
-    @ApiOperation(value = "Get all products", response = List<Product>, tags = "listeProduits")
+    @ApiOperation(value = "Get all products", response = Iterable.class, tags = "listeProduits")
     @GetMapping(value = "/Produits")
     public Map<Integer, Product> listeProduits() {
         return productDB;
@@ -105,8 +105,7 @@ public class ProductController {
             return new ResponseEntity<>("Le produit " + productId + " n'existe pas", HttpStatus.NOT_FOUND);
         }
         product.setId(productId);
-        productDB.update(product);
-
+        return null;
     }
 
 
