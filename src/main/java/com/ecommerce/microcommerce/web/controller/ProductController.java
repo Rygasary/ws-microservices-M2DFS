@@ -17,9 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -112,7 +110,7 @@ public class ProductController {
         return null;
     }
 
-    @ApiOperation(value = "Retourne la différence entre le prix et le prixAchat d'un produit à partir de son ID", tags = "updateProduit")
+    @ApiOperation(value = "Retourne la différence entre le prix et le prixAchat d'un produit à partir de son ID", tags = "calculerMargeProduit")
     @GetMapping(value = "/calculerMargeProduit/{productId}")
     public ResponseEntity<Integer> calculerMargeProduit(@PathVariable int productId){
         System.out.println("Getting price difference of product with ID " + productId);
@@ -124,6 +122,16 @@ public class ProductController {
 
         int priceDifference = product.getPrix() - product.getPrixAchat();
         return new ResponseEntity<>(priceDifference, HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Retourne une Map de tous les produits ranger alphabétiquement", tags = "trierProduitsParOrdreAlphabetique")
+    @GetMapping(value = "/ProduitsABC")
+    public List<Product> trierProduitsParOrdreAlphabetique() {
+        System.out.println("Getting all products and sort them alphabetically");
+        List<Product> productList = new ArrayList(productDB.values());
+        productList.sort(Comparator.comparing(Product::getNom));
+
+        return productList;
     }
 
 
