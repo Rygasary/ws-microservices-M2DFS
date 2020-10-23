@@ -22,11 +22,12 @@ public class Product {
     @ApiModelProperty(notes = "Product name", name = "nom", required = true, value = "Product Name")
     private String nom;
 
-    @Min(value = 1)
+    @Min(value = 1, message = "Le prix doit être supérieur à 0")
     @ApiModelProperty(notes = "Product Price", name = "prix", required = true, value = "250")
     private int prix;
 
     //information que nous ne souhaitons pas exposer
+    @Min(value = 1, message = "ProduitGratuitException")
     @ApiModelProperty(notes = "Product Resell Price", name = "prixAchat", required = true, value = "125")
     private int prixAchat;
 
