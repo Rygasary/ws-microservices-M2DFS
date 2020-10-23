@@ -89,15 +89,16 @@ public class ProductController {
     */
     // Mettre à jour un produit
     @ApiOperation(value = "Mets à jour un produit", tags = "updateProduit")
-    @PutMapping(value = "/updateProduct/{productid}")
-    public ResponseEntity<String> updateProduit(@RequestBody Product product, @PathVariable int productId) {
+    @PutMapping(value = "/updateProduct/{productId}")
+    public ResponseEntity<String> updateProduit(@PathVariable int productId, @RequestBody Product product) {
         System.out.println("Updating product with ID " + productId);
         Product productUpdated = productDB.get(productId);
         if (productUpdated == null){
             return new ResponseEntity<>("Le produit " + productId + " n'existe pas", HttpStatus.NOT_FOUND);
         }
-        product.setId(productId);
-        return null;
+        productDB.remove(productId);
+        productDB.put(productId, product);
+        return new ResponseEntity<>("Le produit a été mis à jour", HttpStatus.OK);
     }
 
     @ApiOperation(value = "Retourne la différence entre le prix et le prixAchat d'un produit à partir de son ID", tags = "calculerMargeProduit")
