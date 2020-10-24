@@ -40,13 +40,16 @@ class ProductControllerTest {
     @Test
     void testListeProduits() {
         Map<Integer, Product> result = productController.listeProduits();
-        Assertions.assertEquals(null, result);
+        Assertions.assertEquals("Aspirateur Robot", result.get(2).getNom());
+        Assertions.assertEquals("Nouveau Item", result.get(3).getNom());
     }
 
     @Test
     void testAfficherUnProduit() {
         ResponseEntity<Product> result = productController.afficherUnProduit(2);
-        Assertions.assertEquals(new ResponseEntity<>(new Product(2, "Aspirateur Robot", 500, 300), HttpStatus.OK), result);
+        Assertions.assertEquals(2, result.getBody().getId());
+        Assertions.assertEquals("Aspirateur Robot", result.getBody().getNom());
+        Assertions.assertEquals(500, result.getBody().getPrix());
     }
 
     @Test
@@ -70,7 +73,9 @@ class ProductControllerTest {
     @Test
     void testTrierProduitsParOrdreAlphabetique() {
         List<Product> result = productController.trierProduitsParOrdreAlphabetique();
-        Assertions.assertEquals(null, result);
+        Assertions.assertEquals("Aspirateur Robot", result.get(0).getNom());
+        Assertions.assertEquals("Nouveau Item", result.get(1).getNom());
+        Assertions.assertEquals("Un truc", result.get(2).getNom());
     }
 }
 
