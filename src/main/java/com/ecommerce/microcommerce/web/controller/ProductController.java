@@ -49,15 +49,15 @@ public class ProductController {
     //Récupérer un produit par son Id
     @ApiOperation(value = "Retourne un produit grâce à son ID", response = Product.class, tags = "afficherUnProduit")
     @GetMapping(value = "/getProduct/{productId}")
-    public Product afficherUnProduit(@PathVariable int productId) {
+    public ResponseEntity<Product> afficherUnProduit(@PathVariable int productId) {
         System.out.println("Getting product with ID " + productId);
 
         Product product = productDB.get(productId);
 
         if (product == null){
-            product = new Product(0, "Votre produit n'existe pas. Ou n'est plus en stock. Ou vous vous êtes trompé d'ID. Mais peut importe, le truc, c'est qu'IL EXISTE PAS!!!!", 0, 0);
+            return new ResponseEntity<>(new Product(-1,"Produit inconnu",-1,-1), HttpStatus.NOT_FOUND);
         }
-        return product;
+        return new ResponseEntity<>(product, HttpStatus.OK);
     }
 
     //ajouter un produit
@@ -82,11 +82,7 @@ public class ProductController {
         productDB.remove(productId);
         return new ResponseEntity<>("Le produit " + productId + " a été supprimé", HttpStatus.OK);
     }
-    /*
-    **************************************
-    TODO LA MISE A JOUR!!!!!!!!!!!!!!
-    **************************************
-    */
+
     // Mettre à jour un produit
     @ApiOperation(value = "Mets à jour un produit", tags = "updateProduit")
     @PutMapping(value = "/updateProduct/{productId}")
@@ -108,7 +104,7 @@ public class ProductController {
         Product product = productDB.get(productId);
 
         if (product == null){
-            return new ResponseEntity<>(0, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(-1, HttpStatus.NOT_FOUND);
         }
 
         int priceDifference = product.getPrix() - product.getPrixAchat();
